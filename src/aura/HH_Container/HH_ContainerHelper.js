@@ -422,7 +422,7 @@
                 this.copyAddrToContact(addr, con);
             }
         }
-        component.set('v.listCon', listCon);
+        component.set('v.listCon', JSON.parse(JSON.stringify(listCon)));
     },
 
     /*******************************************************************************************************
@@ -545,7 +545,7 @@
             this.copyAddrToContact(addrDefault, conNew);
         conNew.npo02__Household_Naming_Order__c = listCon.length;
         listCon.push(conNew);
-        component.set('v.listCon', listCon);
+        component.set('v.listCon', JSON.parse(JSON.stringify(listCon)));
         this.initNewContact(component);
         component.set('v.showNewContactPopup', false);
 
@@ -737,10 +737,13 @@
             listAddr[i].sobjectType = namespacePrefix + 'Address__c';
         }
         listAddr = this.addPrefixToListObjectFields(namespacePrefix, listAddr);
+        listAddr = JSON.stringify(listAddr);
+
         action.setParams({
             hhId: hhMerge.Id,
-            listAddrExisting: listAddr
+            addrString: listAddr
         });
+
         self = this;
         action.setCallback(this, function(response) {
             var state = response.getState();

@@ -489,17 +489,18 @@ public with sharing class HH_Container_LCTRL {
     * @return list<Address__c> The addresses in the household and contacts
     */
     @AuraEnabled
-    public static list<Address__c> getAddresses(ID hhId, list<Address__c> listAddrExisting) {
+    public static list<Address__c> getAddresses(ID hhId, String addrString) {
         try {
             if (hhId == null)
                 return null;
 
             // keep unique list of addresses in temp Address objects
             list<Address__c> listAddr = new list<Address__c>();
+            list<Address__c> listAddrExisting;
             set<String> setAddrKey = new set<String>();
-
             // if they provide existing addresses, do our initialization
-            if (listAddrExisting != null) {
+            if (addrString != null) {
+                listAddrExisting = (List<Address__c>)JSON.deserialize(addrString, List<Address__c>.class);
                 for (Address__c addr : listAddrExisting) {
                     listAddr.add(addr);
                     setAddrKey.add(ADDR_Addresses_TDTM.getAddrKey(addr));
